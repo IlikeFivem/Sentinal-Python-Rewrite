@@ -8,4 +8,6 @@ bot = commands.Bot(command_prefix='!')
 async def on_ready():
     print('The bot is online!')
 
-bot.login(config.TOKEN)
+bot.load_extension("cogs.test")
+
+bot.run(config.TOKEN)
