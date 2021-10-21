@@ -98,6 +98,27 @@ class moderation(commands.Cog):
             await member.send(embed=memberEmbed)
             # Add the muted role to the member
             await member.add_roles(role)
+    
+    @commands.command()
+    async def unmute(self, ctx, member : discord.Member, *, reason=None):
+        # Get muted role from guild
+        role = discord.utils.find(lambda r: r.name == 'muted', ctx.guild.roles)
+        # Create Embed to send into the channel
+        embed = discord.Embed(title='Unmute')
+        embed.add_field(name='Member Unmuted', value=f'{member.display_name}', inline=False)
+        embed.add_field(name='Reason', value=f'{reason}', inline=False)
+        # Send embed into the channel where the command was ran
+        await ctx.send(embed=embed)
+        # Create memberEmbed to send into the members dms
+        memberEmbed = discord.Embed(title='Unmute')
+        memberEmbed.add_field(name='Staff Member', value=f'{ctx.author}', inline=False)
+        memberEmbed.add_field(name='Guild', value=f'{ctx.guild.name}', inline=False)
+        # Send memberEmbed into the members dms
+        await member.send(embed=memberEmbed)
+        if role in member.roles:
+            await member.remove_roles(role)
+        else:
+            await ctx.send('This member is not muted!')
 
 def setup(bot):
     bot.add_cog(moderation(bot))
